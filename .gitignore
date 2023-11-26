@@ -6,17 +6,17 @@ __pycache__
 .DS_Store
 
 # ignore data folder
-./data/
+data/
 
 # ignore checkpoints
-./checkpoints/
+checkpoints/
 
 # ignore logs
-./outputs/
-./wandb/
+outputs/
+wandb/
 
 # ignore pyfastx repo
-./pyfastx/
+pyfastx/
 
 # ignore venvs
-./dlbio_env/
+dlbio_env/
