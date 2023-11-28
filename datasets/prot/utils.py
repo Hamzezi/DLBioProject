@@ -18,10 +18,9 @@ from goatools.base import get_godag
 go = get_godag('go-basic.obo', optional_attrs='relationship')
 EMB_LAYER = 33
 
-ENTRIES = READER = None
-
 @dataclass_json
 @dataclass
+
 class ProtSample:
     input_seq: torch.Tensor
     annot: torch.Tensor
@@ -44,7 +43,6 @@ def get_level(annots, level):
     return {annot for annot in annots if go[annot].level == level}
 
 def select_single(annots):
-    annots = sorted(list(annots))
     return annots.pop()
 
 def select_annot(annots, ancestors, level=5):
@@ -58,90 +56,91 @@ def get_term_frequency(root, reader):
     term_frequency = {}
     fasta = SeqIO.parse(open(os.path.join(root,"uniprot_sprot.fasta")), 'fasta')
 
-    for entry in ENTRIES:
-        annots = reader[entry]
-        for a in annots:
-            term_frequency[a] = term_frequency.get(a, 0) + 1
-
-    return term_frequency, max(term_frequency.values())
-
-def select_annot_via_ic(annots, term_frequency, max_freq):
-    annots = sorted(annots) # lexicographically sort the GO annots because different GO annots might have the same term frequency
-    # lower is more informative
-    annots.sort(key=lambda x: term_frequency.get(x, max_freq+1)) # sort by term frequencies
-    return annots[0]
-
-def get_samples_using_ic(root):
-    samples = []
-    global ENTRIES, READER
-    if ENTRIES is None and READER is None:
-        ENTRIES, READER = get_entries_and_reader(root)
-    adict = get_ancestor_dict(os.path.join(root,"sprot_ancestors.txt"))
-
-    term_frequency, max_freq = get_term_frequency(root, READER)
-
-    for entry in ENTRIES:
-        annots = READER[entry]
-        try:  
-            ancestors = set()
-            for a in annots:
-                ancestors |= adict[a] | {a}
-            ancestors = list(ancestors)
-            annot = select_annot_via_ic(ancestors, term_frequency, max_freq)
-            samples.append(ProtSample(
-                input_seq = get_embedding(os.path.join(root, "embeds"), entry),
-                annot= annot,
-                entry= entry
-            ))
-        except:
-            continue
-
-    return samples
-
-def get_samples(root, level = 5):
-    """ preprocess samples for cryptic with annotations from a given level """
-    samples = []
-    global ENTRIES, READER
-    if ENTRIES is None and READER is None:
-        ENTRIES, READER = get_entries_and_reader(root)
-
-    adict = get_ancestor_dict(os.path.join(root,"sprot_ancestors.txt"))
-
-    for entry in ENTRIES:
-        annots = READER[entry]
-        try:
-            ancestors = set()
-            for a in annots:
-                ancestors |= adict[a]
-            annot = select_annot(annots, ancestors, level)
-            samples.append(ProtSample(
-                input_seq = get_embedding(os.path.join(root, "embeds"), entry),
-                annot= annot,
-                entry= entry
-            ))
-        except:
-            continue
-    return samples
-
-def get_entries_and_reader(root):
-    fasta = SeqIO.parse(open(os.path.join(root,"uniprot_sprot.fasta")), 'fasta')
-    reader = GafReader(os.path.join(root,"filtered_goa_uniprot_all_noiea.gaf")).read_gaf()
-    entries = []
     for i in fasta:
         entry = i.id.split("|")[1]
         try:
             annots = reader[entry]
         except:
-            continue
+            continue   
+            
+        if (len(annots) == 0): continue 
+        else:  
+            for a in annots:
+                term_frequency[a] = term_frequency.get(a, 0) + 1
 
-        if (len(annots) == 0): continue
-        entries.append(entry)
-    return entries, reader
+    return term_frequency, max(term_frequency.values())
+
+def select_annot_via_ic(annots, term_frequency, max_freq):
+    # lower is more informative
+    annots_with_freq = [(term_frequency.get(a, max_freq+1), a) for a in annots]
+    # sort by frequency
+    annots_with_freq.sort()
+    return annots_with_freq[0][1]
+
+def get_samples_using_ic(root):
+    samples = []
+    fasta = SeqIO.parse(open(os.path.join(root,"uniprot_sprot.fasta")), 'fasta')
+    reader = GafReader(os.path.join(root,"filtered_goa_uniprot_all_noiea.gaf")).read_gaf()
+    adict = get_ancestor_dict(os.path.join(root,"sprot_ancestors.txt"))
+
+    term_frequency, max_freq = get_term_frequency(root, reader)
+
+    for i in fasta:
+        entry = i.id.split("|")[1]
+        try:
+            annots = reader[entry]
+        except:
+            continue   
+            
+        if (len(annots) == 0): continue 
+        else:
+            try:  
+                ancestors = set()
+                for a in annots:
+                    ancestors |= adict[a] | {a}
+                ancestors = list(ancestors)
+                annot = select_annot_via_ic(ancestors, term_frequency, max_freq)
+                samples.append(ProtSample(
+                    input_seq = get_embedding(os.path.join(root, "embeds"), entry),
+                    annot= annot,
+                    entry= entry
+                ))
+            except:
+                continue
+    return samples
+
+def get_samples(root, level = 5):
+    """ preprocess samples for cryptic with annotations from a given level """
+    samples = []
+    fasta = SeqIO.parse(open(os.path.join(root,"uniprot_sprot.fasta")), 'fasta')
+    reader = GafReader(os.path.join(root,"filtered_goa_uniprot_all_noiea.gaf")).read_gaf()
+    adict = get_ancestor_dict(os.path.join(root,"sprot_ancestors.txt"))
+    for i in fasta:
+        entry = i.id.split("|")[1]
+        try:
+            annots = reader[entry]
+        except:
+            continue   
+           
+        if (len(annots) == 0): continue 
+        else:  
+            try:
+                ancestors = set()
+                for a in annots:
+                    ancestors |= adict[a]
+                annot = select_annot(annots, ancestors, level)
+                samples.append(ProtSample(
+                    input_seq = get_embedding(os.path.join(root, "embeds"), entry),
+                    annot= annot,
+                    entry= entry
+                ))
+            except:
+                continue
+    return samples
 
 def check_min_samples(samples, min_samples):
     """ reduces samples to samples from classes with > min_sample datapoints """
     count_dict = get_annot_counts(samples)
-    # print("Total number of loaded SwissProt classes:", len(count_dict))
     rm_annots = {annot for annot in count_dict if count_dict[annot] < min_samples}
     return [sample for sample in samples if sample.annot not in rm_annots]
 
@@ -151,12 +150,8 @@ def get_mode_ids(samples, train_test = 0.9, train_val = 0.8):
     """
     count_dict = get_annot_counts(samples)
     sorted_annots = sorted(count_dict)
-    n_classes = len(sorted_annots)
-    train_val = int(train_test*train_val*n_classes)
-    train_test = int(train_test*n_classes)
-    # print("Total number of usable SwissProt samples:", len(samples))
-    # print("Total number of usable SwissProt classes:", n_classes)
-    # print("#train classes {}, #val classes {}, #test classes {}".format(train_val, train_test-train_val, n_classes-train_test))
+    train_val = int(train_test*train_val*len(sorted_annots))
+    train_test = int(train_test*len(sorted_annots))
     return {
             'train': sorted_annots[0:train_val], 
             'val': sorted_annots[train_val:train_test], 

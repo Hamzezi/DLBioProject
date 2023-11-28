@@ -10,7 +10,6 @@ from datasets.prot.utils import *
 EMB_PATH = 'embeddings'
 EMB_LAYER = 33
 PROTDIM = 1280
-ENCODER = None
 
 @dataclass_json
 @dataclass
@@ -25,8 +24,8 @@ class SPDataset(FewShotDataset, ABC):
     _dataset_url = 'https://drive.google.com/u/0/uc?id=1a3IFmUMUXBH8trx_VWKZEGteRiotOkZS&export=download'
 
     def load_swissprot(self, level = 5, mode='train', min_samples =20):
-        samples = get_samples(root = self.data_dir, level=level)
-        # samples = get_samples_using_ic(root = self.data_dir)
+        # samples = get_samples(root = self.data_dir, level=level)
+        samples = get_samples_using_ic(root = self.data_dir)
         samples = check_min_samples(samples, min_samples)
 
         unique_ids = set(get_mode_ids(samples)[mode])
@@ -39,17 +38,11 @@ class SPSimpleDataset(SPDataset):
         self.initialize_data_dir(root, download_flag=False)
         self.samples = self.load_swissprot(mode = mode, min_samples = min_samples)
         self.batch_size = batch_size
-        global ENCODER
-        if ENCODER is None:
-            self.encoder = encodings(self.data_dir)
-            ENCODER = self.encoder
-        else:
-            self.encoder = ENCODER
+        self.encoder = encodings(self.data_dir)
         super().__init__()
 
     def __getitem__(self, i):
         sample = self.samples[i]
-        # input_seq is a tensor of shape (1280,)
         return sample.input_seq, self.encoder[sample.annot]
 
     def __len__(self):
@@ -74,12 +67,7 @@ class SPSetDataset(SPDataset):
         self.n_way = n_way
         self.n_episode = n_episode
         min_samples = n_support + n_query
-        global ENCODER
-        if ENCODER is None:
-            self.encoder = encodings(self.data_dir)
-            ENCODER = self.encoder
-        else:
-            self.encoder = ENCODER
+        self.encoder = encodings(self.data_dir)
 
         samples_all= self.load_swissprot(mode = mode, min_samples = min_samples)
 
@@ -101,12 +89,9 @@ class SPSetDataset(SPDataset):
         super().__init__()
 
     def __getitem__(self, i):
-        # indexed by class id yielded from EpisodicBatchSampler
-        # see https://pytorch.org/docs/stable/data.html#automatic-batching-default
         return next(iter(self.sub_dataloader[i]))
 
     def __len__(self):
-        # number of classes
         return len(self.categories)
 
     @property
@@ -122,16 +107,10 @@ class SPSetDataset(SPDataset):
 class SubDataset(Dataset):
     def __init__(self, samples, data_dir):
         self.samples = samples
-        global ENCODER
-        if ENCODER is None:
-            self.encoder = encodings(self.data_dir)
-            ENCODER = self.encoder
-        else:
-            self.encoder = ENCODER
+        self.encoder = encodings(data_dir)
 
     def __getitem__(self, i):
         sample = self.samples[i]
-        # input_seq is a tensor of shape (1280,)
         return sample.input_seq, self.encoder[sample.annot]
         
 
