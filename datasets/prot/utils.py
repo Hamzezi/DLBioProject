@@ -152,6 +152,7 @@ def get_mode_ids(samples, train_test = 0.9, train_val = 0.8):
     sorted_annots = sorted(count_dict)
     train_val = int(train_test*train_val*len(sorted_annots))
     train_test = int(train_test*len(sorted_annots))
+    # print("#train classes {}, #val classes {}, #test classes {}".format(train_val, train_test-train_val, len(sorted_annots)-train_test))
     return {
             'train': sorted_annots[0:train_val], 
             'val': sorted_annots[train_val:train_test], 
