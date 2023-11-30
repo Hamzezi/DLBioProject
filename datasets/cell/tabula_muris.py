@@ -5,11 +5,23 @@ from torch.utils.data import DataLoader
 
 from datasets.cell.utils import MacaData
 from datasets.dataset import *
+from datasets.cell.map_GO import get_go2gene
 
 
 class TMDataset(FewShotDataset, ABC):
     _dataset_name = 'tabula_muris'
     _dataset_url = 'http://snap.stanford.edu/comet/data/tabula-muris-comet.zip'
+
+    @staticmethod
+    def create_go_mask(adata, go2gene):
+        genes = adata.var_names
+        gene2index = {g: i for i, g in enumerate(genes)}
+        GO_IDs = sorted(go2gene.keys())
+        go_mask = []
+        for go in GO_IDs:
+            go_genes = go2gene[go]
+            go_mask.append([gene2index[gene] for gene in go_genes])
+        return go_mask
 
     def load_tabular_muris(self, mode='train', min_samples=20):
         train_tissues = ['BAT', 'Bladder', 'Brain_Myeloid', 'Brain_Non-Myeloid',
@@ -34,15 +46,18 @@ class TMDataset(FewShotDataset, ABC):
         samples = adata.to_df().to_numpy(dtype=np.float32)
         # convert label to torch tensor y
         targets = adata.obs['label'].cat.codes.to_numpy(dtype=np.int32)
-        # go2gene = get_go2gene(adata=adata, GO_min_genes=32, GO_max_genes=None, GO_min_level=6, GO_max_level=1)
-        # go_mask = create_go_mask(adata, go2gene)
-        return samples, targets
+        go2gene = get_go2gene(
+            adata=adata, GO_min_genes=32, GO_max_genes=None,
+            GO_min_level=6, GO_max_level=1, data_dir=self._data_dir
+        )
+        go_mask = self.create_go_mask(adata, go2gene)
+        return samples, targets, go_mask
 
 
 class TMSimpleDataset(TMDataset):
     def __init__(self, batch_size, root='./data/', mode='train', min_samples=20):
         self.initialize_data_dir(root, download_flag=True)
-        self.samples, self.targets = self.load_tabular_muris(mode, min_samples)
+        self.samples, self.targets, self.go_mask = self.load_tabular_muris(mode, min_samples)
         self.batch_size = batch_size
         super().__init__()
 
@@ -72,7 +87,9 @@ class TMSetDataset(TMDataset):
         self.n_episode = n_episode
         min_samples = n_support + n_query
 
-        samples_all, targets_all = self.load_tabular_muris(mode, min_samples)
+        samples_all, targets_all, self.go_mask = self.load_tabular_muris(mode, min_samples)
+        # 153 GO masks, each with 30s-200s genes
+
         self.categories = np.unique(targets_all)  # Unique cell labels
         self.x_dim = samples_all.shape[1]
 

@@ -30,8 +30,8 @@ def initialize_dataset_model(cfg):
     # For MAML (and other optimization-based methods), need to instantiate backbone layers with fast weight
     if cfg.method.fast_weight:
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, fast_weight=True)
-    else:
-        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim)
+    elif cfg.method.name == "protonet" and "EnFCNet" in cfg.backbone._target_: # COMET
+        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask)
 
     # Instantiate few-shot method class
     model = instantiate(cfg.method.cls, backbone=backbone)
