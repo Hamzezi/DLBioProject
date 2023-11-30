@@ -40,7 +40,7 @@ def generate_simple_go_mask(x_dim, num_GOs=20):
 
 class EnFCNet(nn.Module):
 
-    def __init__(self, x_dim, layer_dim=None, go_mask=None, mask_method="index", dropout=0.2):
+    def __init__(self, x_dim, layer_dim=None, go_mask=None, mask_method="multiply", dropout=0.2):
         super(EnFCNet, self).__init__()
 
         if go_mask is None:
@@ -60,13 +60,12 @@ class EnFCNet(nn.Module):
         else:
             raise ValueError("Unsupported masking method: {}".format(mask_method))
 
-        self.conv1 = nn.Conv1d(self.input_dim, layer_dim[0], 1, bias=True)
-        self.conv2 = nn.Conv1d(layer_dim[0], layer_dim[1], 1, bias=True)
-        self.relu = nn.ReLU()
-        self.dropout = nn.Dropout(p=dropout)
-        self.bn1 = nn.BatchNorm1d(self.n_concepts)
-        self.bn2 = nn.BatchNorm1d(self.n_concepts)
-        self.final_feat_dim = layer_dim[1]
+        self.final_feat_dim = layer_dim[-1] # used in other places
+
+        self.blocks = []
+        for in_dim, out_dim in zip([self.input_dim] + layer_dim[:-1], layer_dim):
+            self.blocks.append(Conv1dBlock(in_dim, out_dim, self.n_concepts, dropout=dropout))
+        self.blocks = nn.Sequential(*self.blocks)
 
     def compute_input_dim(self, x_dim):
         if self.n_concepts == self.num_GOs + 1:
@@ -106,17 +105,28 @@ class EnFCNet(nn.Module):
     def forward(self, x):
         # need to generate masks if the batch size change or
         x = self.get_masked_inputs(x) # (n_concepts, batch, numGenes)
-        x = x.permute(1, 2, 0) # (batch, numGenes, n_concepts)
-        x = self.conv1(x) # 1x1 conv operating on the n_concepts dimension independently
-        x = x.permute(0, 2, 1) # (batch, n_concepts, numGenes)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.dropout(x)
-        x = x.permute(0, 2, 1) # (batch, numGenes, n_concepts)
-        x = self.conv2(x)
-        x = x.permute(0, 2, 1) # (batch, n_concepts, numGenes)
-        x = self.bn2(x)
-        x = self.relu(x)
-        x = self.dropout(x)
+        x = x.permute(1, 0, 2) # (batch, n_concepts, numGenes)
+        x = self.blocks(x)
 
+        return x
+
+
+class Conv1dBlock(nn.Module):
+    # put the class here instead of blocks.py because it is only used in EnFCNet (and to improve readability)
+
+    def __init__(self, in_channels, out_channels, n_concepts, dropout=0.2):
+        super(Conv1dBlock, self).__init__()
+        self.conv = nn.Conv1d(in_channels, out_channels, 1, bias=True)
+        self.bn = nn.BatchNorm1d(n_concepts) # bn operates on the n_concepts dimension
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(p=dropout)
+    
+    def forward(self, x):
+        # x: (batch, n_concepts, numGenes)
+        x = x.permute(0, 2, 1) # (batch, numGenes, n_concepts)
+        x = self.conv(x)
+        x = x.permute(0, 2, 1) # (batch, n_concepts, numGenes)
+        x = self.bn(x)
+        x = self.relu(x)
+        x = self.dropout(x)
         return x
