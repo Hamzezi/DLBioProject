@@ -30,11 +30,15 @@ def initialize_dataset_model(cfg):
     # For MAML (and other optimization-based methods), need to instantiate backbone layers with fast weight
     if cfg.method.fast_weight:
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, fast_weight=True)
-    elif cfg.method.name == "protonet" and "EnFCNet" in cfg.backbone._target_: # COMET
+    elif cfg.method.name == "protonet" and "EnFCNet" in cfg.backbone._target_: # COMET needs go_mask
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask)
+    else:
+        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim)
 
     # Instantiate few-shot method class
     model = instantiate(cfg.method.cls, backbone=backbone)
+
+    print_num_params(model)
 
     if torch.cuda.is_available():
         model = model.cuda()
@@ -176,6 +180,11 @@ def test(cfg, model, split):
         f.write('Time: %s, Setting: %s, Acc: %s, Model: %s \n' % (timestamp, exp_setting, acc_str, model_file))
 
     return acc_mean, acc_std
+
+
+def print_num_params(model):
+    num_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(f"Number of trainable parameters: {num_params}")
 
 
 if __name__ == '__main__':
