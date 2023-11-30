@@ -29,22 +29,23 @@ class FCNet(nn.Module):
 
 
 def generate_simple_go_mask(x_dim, num_GOs=20):
-    # Generate a simple mask by dividing the genes into num_GOs groups
+    # Generate a simple mask by dividing the genes (x_dim) into num_GOs groups
     go_mask = []
-    assert x_dim % num_GOs == 0, f"x_dim must be divisible by num_GOs: {x_dim}, {num_GOs}"
+    # assert x_dim % num_GOs == 0, f"x_dim must be divisible by num_GOs: {x_dim}, {num_GOs}"
+    # if x_dim is not divisible by num_GOs, we just ignore the last few genes
     num_genes_per_go = x_dim // num_GOs
     for i in range(num_GOs):
         go_mask.append(list(range(i * num_genes_per_go, (i + 1) * num_genes_per_go)))
     return go_mask
 
 
-class EnFCNet(nn.Module):
+class ConceptNetMixin:
+    # implements the input_dim and masking logic for EnFCNet and TransformerNet
+    # this class is not meant to be used directly
 
-    def __init__(self, x_dim, layer_dim=None, go_mask=None, mask_method="multiply", dropout=0.2):
-        super(EnFCNet, self).__init__()
-
+    def __init__(self, x_dim, go_mask=None, mask_method="multiply", num_GOs=20):
         if go_mask is None:
-            self.go_mask = generate_simple_go_mask(x_dim=x_dim, num_GOs=20) # for testing
+            self.go_mask = generate_simple_go_mask(x_dim=x_dim, num_GOs=num_GOs) # patches of genes
         else:
             self.go_mask = go_mask
 
@@ -53,19 +54,12 @@ class EnFCNet(nn.Module):
         self.n_concepts = self.num_GOs# + 1
         self.mask_method = mask_method
 
-        if mask_method == "index":
+        if mask_method == "index": # index the original x according to each concept in self.masks (bool tensor)
             self.input_dim = self.compute_input_dim(x_dim)
-        elif mask_method == "multiply":
+        elif mask_method == "multiply": # masks the original x with each concept in self.masks (bool tensor)
             self.input_dim = x_dim
         else:
             raise ValueError("Unsupported masking method: {}".format(mask_method))
-
-        self.final_feat_dim = layer_dim[-1] # used in other places
-
-        self.blocks = []
-        for in_dim, out_dim in zip([self.input_dim] + layer_dim[:-1], layer_dim):
-            self.blocks.append(Conv1dBlock(in_dim, out_dim, self.n_concepts, dropout=dropout))
-        self.blocks = nn.Sequential(*self.blocks)
 
     def compute_input_dim(self, x_dim):
         if self.n_concepts == self.num_GOs + 1:
@@ -100,12 +94,28 @@ class EnFCNet(nn.Module):
                 x_i = torch.masked_select(x, mask_i).view(batch, -1)
                 x_new[i][:, :x_i.shape[1]] = x_i # pad with zeros
             x = x_new
+        x = x.permute(1, 0, 2).contiguous() # (batch, n_concepts, numGenes)
         return x
+
+
+class EnFCNet(nn.Module, ConceptNetMixin):
+
+    def __init__(self, x_dim, layer_dim=[64, 64], go_mask=None, mask_method="multiply", dropout=0.2):
+        # initialize ConceptNetMixin with provided args
+        super(EnFCNet, self).__init__()
+        ConceptNetMixin.__init__(self, x_dim, go_mask, mask_method)
+
+        self.final_feat_dim = layer_dim[-1] # used in other places
+
+        self.blocks = []
+        for in_dim, out_dim in zip([self.input_dim] + layer_dim[:-1], layer_dim):
+            self.blocks.append(Conv1dBlock(in_dim, out_dim, self.n_concepts, dropout=dropout))
+        self.blocks = nn.Sequential(*self.blocks)
+
 
     def forward(self, x):
         # need to generate masks if the batch size change or
-        x = self.get_masked_inputs(x) # (n_concepts, batch, numGenes)
-        x = x.permute(1, 0, 2) # (batch, n_concepts, numGenes)
+        x = self.get_masked_inputs(x) # (batch, n_concepts, numGenes)
         x = self.blocks(x)
 
         return x
