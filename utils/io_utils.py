@@ -57,6 +57,7 @@ def get_model_file(cfg):
 def fix_seed(seed=42):
     np.random.seed(seed)
     torch.manual_seed(seed)
+    torch.mps.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     random.seed(seed)
 

@@ -37,13 +37,14 @@ def initialize_dataset_model(cfg):
     else:
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim)
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
     # Instantiate few-shot method class
     model = instantiate(cfg.method.cls, backbone=backbone)
+    model = model.to(device)
 
     print_num_params(model)
 
-    if torch.cuda.is_available():
-        model = model.cuda()
 
     if cfg.method.name == 'maml':
         cfg.method.stop_epoch *= model.n_task  # maml use multiple tasks in one update

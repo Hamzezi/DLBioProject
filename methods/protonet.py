@@ -29,7 +29,7 @@ class ProtoNet(MetaTemplate):
     def set_forward_loss(self, x):
         # y_query shape: (n_query * n_way,), e.g. [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2] if n_way = 3, n_query = 4
         y_query = torch.from_numpy(np.repeat(range( self.n_way ), self.n_query )).long()
-        y_query = Variable(y_query.cuda())
+        y_query = Variable(y_query.to(self.device))
 
         scores = self.set_forward(x)
         return self.loss_fn(scores, y_query )

@@ -77,6 +77,8 @@ def feature_evaluation(cl_data_file, model, n_way=5, n_support=5, n_query=15, ad
 
 
 def save_features(model, data_loader, outfile):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     f = h5py.File(outfile, 'w')
     max_count = len(data_loader) * data_loader.batch_size
     all_labels = f.create_dataset('all_labels', (max_count,), dtype='i')
@@ -85,7 +87,7 @@ def save_features(model, data_loader, outfile):
     for i, (x, y) in enumerate(data_loader):
         if i % 10 == 0:
             print('{:d}/{:d}'.format(i, len(data_loader)))
-        x = x.cuda()
+        x = x.to(device)
         x_var = Variable(x)
         feats = model(x_var)
         if all_feats is None:

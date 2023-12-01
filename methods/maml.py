@@ -41,16 +41,14 @@ class MAML(MetaTemplate):
     def set_forward(self, x, y=None):
 
         if isinstance(x, list):  # If there are >1 inputs to model (e.g. GeneBac)
-            if torch.cuda.is_available():
-                x = [obj.cuda() for obj in x]
+            x = [obj.to(self.device) for obj in x]
             x_var = [Variable(obj) for obj in x]
             x_a_i = [x_var[i][:, :self.n_support, :].contiguous().view(self.n_way * self.n_support,
                                                                 *x[i].size()[2:]) for i in range(len(x))] #support set
             x_b_i = [x_var[i][:, self.n_support:, :].contiguous().view(self.n_way * self.n_query, *x[i].size()[2:]) for i in range(len(x))]  # query data
 
         else:
-            if torch.cuda.is_available():
-                x = x.cuda()
+            x = x.to(self.device)
             x_var = Variable(x)
             x_a_i = x_var[:, :self.n_support, :].contiguous().view(self.n_way * self.n_support,
                                                                 *x.size()[2:])  # support data
@@ -62,8 +60,8 @@ class MAML(MetaTemplate):
             y_var = Variable(y)
             y_a_i = y_var[:, :self.n_support].contiguous().view(self.n_way * self.n_support,
                                                                 *y.size()[2:])  # label for support data
-        if torch.cuda.is_available():
-            y_a_i = y_a_i.cuda()
+        if torch.backends.mps.is_available():
+            y_a_i = y_a_i.to(self.device)
 
         fast_parameters = list(self.parameters())  # the first gradient calcuated in line 45 is based on original weight
         for weight in self.parameters():
@@ -103,8 +101,8 @@ class MAML(MetaTemplate):
             y_var = Variable(y)
             y_b_i = y_var[:, self.n_support:].contiguous().view(self.n_way * self.n_query, *y.size()[2:])
 
-        if torch.cuda.is_available():
-            y_b_i = y_b_i.cuda()
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        y_b_i = y_b_i.to(device)
 
         loss = self.loss_fn(scores, y_b_i.long())
 
