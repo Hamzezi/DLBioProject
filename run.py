@@ -8,6 +8,8 @@ from prettytable import PrettyTable
 from datasets.cell.tabula_muris import *
 from utils.io_utils import get_resume_file, hydra_setup, fix_seed, model_to_dict, opt_to_dict, get_model_file
 
+import sys
+
 
 def initialize_dataset_model(cfg):
     # Instantiate train dataset as specified in dataset config under simple_cls or set_cls
@@ -34,6 +36,26 @@ def initialize_dataset_model(cfg):
             cfg.method.name == "protonet" and \
             ("EnFCNet" in cfg.backbone._target_):
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask) # COMET needs go_mask
+    elif hasattr(train_dataset, "go_mask") and \
+            cfg.method.name == "transformer_protonet":
+        transformer_type = cfg.method.transformer_type
+        if transformer_type not in ["transformer", "transformer_encoder", "transformer_decoder"]:
+            raise ValueError(f"Unknown transformer name: {transformer_type}")
+        
+        if transformer_type == "transformer":
+            args = cfg.method.transformer_args
+            backbone_name = "backbones.transformer.TransformerNet"
+        elif transformer_type == "transformer_encoder":
+            args = cfg.method.transformer_encoder_args
+            backbone_name = "backbones.transformer.TransformerEncoderNet"
+        elif transformer_type == "transformer_decoder":
+            args = cfg.method.transformer_decoder_args
+            backbone_name = "backbones.transformer.TransformerDecoderNet"
+        
+        # set _target_ to backbone_name
+        cfg.backbone._target_ = backbone_name
+
+        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask, **args)
     else:
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim)
 
@@ -42,6 +64,10 @@ def initialize_dataset_model(cfg):
     # Instantiate few-shot method class
     model = instantiate(cfg.method.cls, backbone=backbone)
     model = model.to(device)
+
+    # Print model architecture
+    # print("Model Architecture:")
+    # print(model)
 
     print_num_params(model)
 
@@ -65,6 +91,8 @@ def run(cfg):
     fix_seed(cfg.exp.seed)
 
     train_loader, val_loader, model = initialize_dataset_model(cfg)
+
+    sys.exit(0)
 
     if cfg.mode == "train":
         model = train(train_loader, val_loader, model, cfg)
