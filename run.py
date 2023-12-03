@@ -92,8 +92,6 @@ def run(cfg):
 
     train_loader, val_loader, model = initialize_dataset_model(cfg)
 
-    sys.exit(0)
-
     if cfg.mode == "train":
         model = train(train_loader, val_loader, model, cfg)
 

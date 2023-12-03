@@ -16,6 +16,7 @@ for params in param_combinations:
     transformer, num_layers, nhead, dropout = params
     exp_name = f"{transformer}_{num_layers}_{nhead}_{dropout}"
     cmd = f"python run.py exp.name={exp_name} method=transformer method.transformer_type={transformer} method.{transformer}_args.num_layers={num_layers} method.{transformer}_args.nhead={nhead} method.{transformer}_args.dropout={dropout} dataset={dataset}"
-    print(cmd)
+    
+    print(f"Running command: {cmd}")
     subprocess.call(cmd, shell=True)
     break
