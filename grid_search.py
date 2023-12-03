@@ -19,4 +19,4 @@ for params in param_combinations:
     
     print(f"Running command: {cmd}")
     subprocess.call(cmd, shell=True)
-    break
+    
