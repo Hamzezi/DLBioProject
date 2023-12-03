@@ -1,0 +1,9 @@
+defaults:
+  - meta_base
+  - transformer_base
+
+cls:
+  _target_: methods.protonet.ProtoNet
+
+transformer_type: transformer # by default, the transformer is named as 'transformer'
+name: transformer_protonet
