@@ -2,7 +2,7 @@ import hydra
 import wandb
 from hydra.utils import instantiate
 from math import ceil
-from omegaconf import OmegaConf
+from omegaconf import OmegaConf, open_dict
 from prettytable import PrettyTable
 
 from datasets.cell.tabula_muris import *
@@ -36,8 +36,7 @@ def initialize_dataset_model(cfg):
             cfg.method.name == "protonet" and \
             ("EnFCNet" in cfg.backbone._target_):
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask) # COMET needs go_mask
-    elif hasattr(train_dataset, "go_mask") and \
-            cfg.method.name == "transformer_protonet":
+    elif cfg.method.name == "transformer_protonet":
         transformer_type = cfg.method.transformer_type
         if transformer_type not in ["transformer", "transformer_encoder", "transformer_decoder"]:
             raise ValueError(f"Unknown transformer name: {transformer_type}")
@@ -55,7 +54,15 @@ def initialize_dataset_model(cfg):
         # set _target_ to backbone_name
         cfg.backbone._target_ = backbone_name
 
-        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask, **kwargs)
+        with open_dict(kwargs):
+            given_masks = kwargs.pop("given_masks", False)
+
+        if given_masks and hasattr(train_dataset, "go_mask"):
+            go_mask = train_dataset.go_mask
+        else:
+            go_mask = None
+
+        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=go_mask, **kwargs)
     else:
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim)
 

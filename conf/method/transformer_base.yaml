@@ -1,22 +1,25 @@
 transformer_encoder_args:
   num_layers: 1
-  nhead: 1
+  nhead: 2
   dropout: 0
   mask_method: 'index'
+  given_masks: False
   num_GOs: 20
 
 transformer_decoder_args:
   n_decoder_concepts: 10
   num_layers: 1
-  nhead: 1
+  nhead: 2
   dropout: 0
   mask_method: 'index'
+  given_masks: False
   num_GOs: 20
 
 transformer_args:
   n_decoder_concepts: 10
   num_layers: 1
-  nhead: 1
+  nhead: 2
   dropout: 0
   mask_method: 'index'
+  given_masks: False
   num_GOs: 20
