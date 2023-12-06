@@ -28,7 +28,7 @@ class TransformerDecoderNet(nn.Module, ConceptNetMixin):
     #TODO: this has subpar performance compared to EnFCNet
     def __init__(self, x_dim, layer_dim, n_decoder_concepts=10, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
         super(TransformerDecoderNet, self).__init__()
-        ConceptNetMixin.__init__(self, x_dim, layer_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs) # more patches => fewer parameters
+        ConceptNetMixin.__init__(self, x_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs) # more patches => fewer parameters
 
         self.n_decoder_concepts = n_decoder_concepts
         self.concept_embeds = nn.Embedding(self.n_decoder_concepts, self.input_dim)
