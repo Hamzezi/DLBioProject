@@ -69,6 +69,24 @@ The grid search is defined in `grid_search.py` in order to tune the hyperparamet
 python grid_search.py
 ```
 
+#### multiprocessing
+
+In order to run the grid search in a parallel manner, you can add the `--multiprocessing` flag to the command, like so:
+
+```bash
+python grid_search.py --multiprocess
+```
+
+> Note: This will by default set the number of cores to `multiprocessing.cpu_count()-1`. In order to change this, please refer to the [number of cores](#number-of-cores) section below.
+
+##### Number of cores
+
+To set the number of cores to be used, you can use the follwing flag `--num_processes`, note that the `--multiprocess` flag needs to be specified too. Below, you will find and example of usage where we set the `number of cores to 2`.
+
+```bash
+python grid_search.py --multiprocess --num_processes 2 
+```
+
 ### Testing
 
 The training process will automatically evaluate at the end. To only evaluate without
