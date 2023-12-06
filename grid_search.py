@@ -14,9 +14,9 @@ def main(multiprocessing_enabled, num_processes):
 
     transformer_type_values = ["transformer_encoder", "transformer_decoder", "transformer"]
     num_layers_values = [1, 2, 3]
-    nhead_values = [1, 2, 4]
+    nhead_values = [2, 4, 8]
     dropout_values = [0, 0.25, 0.5]
-    num_GOs_values = [10, 20, 30]
+    num_GOs_values = [10, 20, 40]
     dataset = "tabula_muris"
 
     param_combinations = list(itertools.product(transformer_type_values,\
@@ -33,7 +33,8 @@ def main(multiprocessing_enabled, num_processes):
             f"python run.py exp.name={exp_name} method=transformer "
             f"method.transformer_type={transformer} method.{transformer}_args.num_layers={num_layers} "
             f"method.{transformer}_args.num_GOs={num_GOs} method.{transformer}_args.nhead={nhead} "
-            f"method.{transformer}_args.dropout={dropout} dataset={dataset}"
+            f"method.{transformer}_args.dropout={dropout} dataset={dataset} "
+            f"method.stop_epoch=10"
         )
         cmds.append(cmd)
     
