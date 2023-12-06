@@ -43,19 +43,19 @@ def initialize_dataset_model(cfg):
             raise ValueError(f"Unknown transformer name: {transformer_type}")
         
         if transformer_type == "transformer":
-            args = cfg.method.transformer_args
+            kwargs = cfg.method.transformer_args
             backbone_name = "backbones.transformer.TransformerNet"
         elif transformer_type == "transformer_encoder":
-            args = cfg.method.transformer_encoder_args
+            kwargs = cfg.method.transformer_encoder_args
             backbone_name = "backbones.transformer.TransformerEncoderNet"
         elif transformer_type == "transformer_decoder":
-            args = cfg.method.transformer_decoder_args
+            kwargs = cfg.method.transformer_decoder_args
             backbone_name = "backbones.transformer.TransformerDecoderNet"
         
         # set _target_ to backbone_name
         cfg.backbone._target_ = backbone_name
 
-        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask, **args)
+        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask, **kwargs)
     else:
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim)
 
