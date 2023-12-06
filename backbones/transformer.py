@@ -6,7 +6,7 @@ from backbones.fcnet import ConceptNetMixin
 
 class TransformerEncoderNet(nn.Module, ConceptNetMixin):
     #TODO: this seems to work FAR better than TransformerDecoderNet
-    def __init__(self, x_dim, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
+    def __init__(self, x_dim, layer_dim, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
         super(TransformerEncoderNet, self).__init__()
         ConceptNetMixin.__init__(self, x_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs) # more patches => fewer parameters
         
@@ -26,7 +26,7 @@ class TransformerEncoderNet(nn.Module, ConceptNetMixin):
 
 class TransformerDecoderNet(nn.Module, ConceptNetMixin):
     #TODO: this has subpar performance compared to EnFCNet
-    def __init__(self, x_dim, n_decoder_concepts=10, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
+    def __init__(self, x_dim, layer_dim, n_decoder_concepts=10, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
         super(TransformerDecoderNet, self).__init__()
         ConceptNetMixin.__init__(self, x_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs) # more patches => fewer parameters
 
@@ -52,7 +52,7 @@ class TransformerDecoderNet(nn.Module, ConceptNetMixin):
 
 class TransformerNet(nn.Module, ConceptNetMixin):
 
-    def __init__(self, x_dim, n_decoder_concepts=10, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
+    def __init__(self, x_dim, layer_dim, n_decoder_concepts=10, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
         super(TransformerNet, self).__init__()
         ConceptNetMixin.__init__(self, x_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs) # more patches => fewer parameters
 
