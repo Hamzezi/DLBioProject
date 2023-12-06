@@ -16,7 +16,7 @@ exp:
   seed: 42
   val_freq: 1
 
-optimizer: Adam
+optimizer: AdamW
 lr: 0.001
 optimizer_cls:
   _target_: torch.optim.${optimizer}
