@@ -117,5 +117,7 @@ class EpisodicBatchSampler(object):
 
     def __iter__(self):
         # Randomly sample n_way classes from the dataset, do this n_episodes times
+        # Each epsiode is a batch of size n_way
+        # Each of these batches (i.e each class) has n_support + n_query samples (sub batch size)
         for i in range(self.n_episodes):
             yield torch.randperm(self.n_classes)[:self.n_way] # tensor of size (n_way,)
