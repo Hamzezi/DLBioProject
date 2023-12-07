@@ -1,0 +1,296 @@
+{
+    "transformer_encoder_c1_l1_h2_ffw128_p0.1_mTrue_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c1_l1_h2_ffw128_p0.1_mTrue_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_153804/best_model.tar ",
+        "train_acc": 87.36,
+        "val_acc": 82.18,
+        "test_acc": 82.84
+    },
+    "transformer_encoder_c10_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_153811/best_model.tar ",
+        "train_acc": 97.23,
+        "val_acc": 93.56,
+        "test_acc": 93.79
+    },
+    "transformer_encoder_c10_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_153812/best_model.tar ",
+        "train_acc": 89.2,
+        "val_acc": 85.91,
+        "test_acc": 86.51
+    },
+    "transformer_encoder_c1_l1_h2_ffw128_p0.1_mTrue_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c1_l1_h2_ffw128_p0.1_mTrue_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_153816/best_model.tar ",
+        "train_acc": 96.28,
+        "val_acc": 93.06,
+        "test_acc": 93.19
+    },
+    "transformer_encoder_c10_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_153817/best_model.tar ",
+        "train_acc": 97.07,
+        "val_acc": 93.8,
+        "test_acc": 94.37
+    },
+    "transformer_encoder_c1_l1_h2_ffw64_p0.1_mTrue_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c1_l1_h2_ffw64_p0.1_mTrue_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_153818/best_model.tar ",
+        "train_acc": 87.68,
+        "val_acc": 81.63,
+        "test_acc": 83.42
+    },
+    "transformer_encoder_c1_l1_h2_ffw64_p0.1_mTrue_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c1_l1_h2_ffw64_p0.1_mTrue_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_153819/best_model.tar ",
+        "train_acc": 94.98,
+        "val_acc": 93.38,
+        "test_acc": 93.86
+    },
+    "transformer_encoder_c10_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_153819/best_model.tar ",
+        "train_acc": 89.86,
+        "val_acc": 84.52,
+        "test_acc": 86.11
+    },
+    "transformer_encoder_c1_l1_h2_ffw256_p0.1_mTrue_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c1_l1_h2_ffw256_p0.1_mTrue_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_153822/best_model.tar ",
+        "train_acc": 95.65,
+        "val_acc": 92.76,
+        "test_acc": 93.47
+    },
+    "transformer_encoder_c1_l1_h2_ffw256_p0.1_mTrue_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c1_l1_h2_ffw256_p0.1_mTrue_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_153824/best_model.tar ",
+        "train_acc": 88.47,
+        "val_acc": 83.05,
+        "test_acc": 82.91
+    },
+    "transformer_encoder_c10_l1_h2_ffw128_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw128_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_153900/best_model.tar ",
+        "train_acc": 78.39,
+        "val_acc": 72.43,
+        "test_acc": 66.11
+    },
+    "transformer_encoder_c10_l1_h2_ffw64_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw64_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_153906/best_model.tar ",
+        "train_acc": 68.82,
+        "val_acc": 71.32,
+        "test_acc": 63.9
+    },
+    "transformer_encoder_c10_l1_h2_ffw64_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw64_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_153923/best_model.tar ",
+        "train_acc": 52.06,
+        "val_acc": 56.51,
+        "test_acc": 52.52
+    },
+    "transformer_encoder_c10_l1_h2_ffw128_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw128_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_153927/best_model.tar ",
+        "train_acc": 56.36,
+        "val_acc": 57.42,
+        "test_acc": 53.24
+    },
+    "transformer_encoder_c10_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_155000/best_model.tar ",
+        "train_acc": 92.07,
+        "val_acc": 84.42,
+        "test_acc": 85.02
+    },
+    "transformer_encoder_c10_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_155013/best_model.tar ",
+        "train_acc": 95.69,
+        "val_acc": 94.37,
+        "test_acc": 94.56
+    },
+    "transformer_encoder_c10_l1_h2_ffw256_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw256_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_155110/best_model.tar ",
+        "train_acc": 72.04,
+        "val_acc": 74.14,
+        "test_acc": 65.44
+    },
+    "transformer_encoder_c20_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_155125/best_model.tar ",
+        "train_acc": 89.6,
+        "val_acc": 84.3,
+        "test_acc": 86.35
+    },
+    "transformer_encoder_c10_l1_h2_ffw256_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c10_l1_h2_ffw256_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_155130/best_model.tar ",
+        "train_acc": 49.76,
+        "val_acc": 56.6,
+        "test_acc": 53.92
+    },
+    "transformer_encoder_c20_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_155148/best_model.tar ",
+        "train_acc": 95.68,
+        "val_acc": 94.66,
+        "test_acc": 94.38
+    },
+    "transformer_encoder_c20_l1_h2_ffw64_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw64_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_155324/best_model.tar ",
+        "train_acc": 72.01,
+        "val_acc": 73.42,
+        "test_acc": 65.1
+    },
+    "transformer_encoder_c20_l1_h2_ffw64_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw64_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_155348/best_model.tar ",
+        "train_acc": 50.63,
+        "val_acc": 55.62,
+        "test_acc": 53.92
+    },
+    "transformer_encoder_c20_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_160136/best_model.tar ",
+        "train_acc": 88.81,
+        "val_acc": 84.6,
+        "test_acc": 85.01
+    },
+    "transformer_encoder_c20_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_160136/best_model.tar ",
+        "train_acc": 95.87,
+        "val_acc": 94.55,
+        "test_acc": 94.04
+    },
+    "transformer_encoder_c20_l1_h2_ffw128_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw128_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_160457/best_model.tar ",
+        "train_acc": 53.44,
+        "val_acc": 56.54,
+        "test_acc": 53.7
+    },
+    "transformer_encoder_c20_l1_h2_ffw128_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw128_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_160525/best_model.tar ",
+        "train_acc": 73.61,
+        "val_acc": 72.97,
+        "test_acc": 64.49
+    },
+    "transformer_encoder_c20_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_160804/best_model.tar ",
+        "train_acc": 91.57,
+        "val_acc": 84.91,
+        "test_acc": 85.74
+    },
+    "transformer_encoder_c20_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_160816/best_model.tar ",
+        "train_acc": 95.6,
+        "val_acc": 94.48,
+        "test_acc": 95.05
+    },
+    "transformer_encoder_c20_l1_h2_ffw256_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw256_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_161255/best_model.tar ",
+        "train_acc": 56.96,
+        "val_acc": 56.41,
+        "test_acc": 54.22
+    },
+    "transformer_encoder_c20_l1_h2_ffw256_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c20_l1_h2_ffw256_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_161303/best_model.tar ",
+        "train_acc": 83.24,
+        "val_acc": 72.89,
+        "test_acc": 63.07
+    },
+    "transformer_encoder_c40_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_161833/best_model.tar ",
+        "train_acc": 96.34,
+        "val_acc": 94.45,
+        "test_acc": 94.31
+    },
+    "transformer_encoder_c40_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw64_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_161833/best_model.tar ",
+        "train_acc": 88.08,
+        "val_acc": 84.58,
+        "test_acc": 84.47
+    },
+    "transformer_encoder_c40_l1_h2_ffw64_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw64_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_162434/best_model.tar ",
+        "train_acc": 75.21,
+        "val_acc": 71.98,
+        "test_acc": 63.46
+    },
+    "transformer_encoder_c40_l1_h2_ffw64_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw64_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_162435/best_model.tar ",
+        "train_acc": 52.22,
+        "val_acc": 54.38,
+        "test_acc": 54.06
+    },
+    "transformer_encoder_c40_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_162524/best_model.tar ",
+        "train_acc": 96.46,
+        "val_acc": 94.4,
+        "test_acc": 94.29
+    },
+    "transformer_encoder_c40_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw128_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_162524/best_model.tar ",
+        "train_acc": 88.26,
+        "val_acc": 85.19,
+        "test_acc": 84.87
+    },
+    "transformer_encoder_c40_l1_h2_ffw128_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw128_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_163157/best_model.tar ",
+        "train_acc": 75.14,
+        "val_acc": 72.77,
+        "test_acc": 64.31
+    },
+    "transformer_encoder_c40_l1_h2_ffw128_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw128_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_163203/best_model.tar ",
+        "train_acc": 51.58,
+        "val_acc": 54.48,
+        "test_acc": 53.27
+    },
+    "transformer_encoder_c40_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k1": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k1/tabula_muris/transformer_protonet_FCNet/20231207_164757/best_model.tar ",
+        "train_acc": 89.28,
+        "val_acc": 85.39,
+        "test_acc": 84.07
+    },
+    "transformer_encoder_c40_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k5": {
+        "setting": "tabula_muris-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw256_p0.1_mFalse_dtabula_muris_k5/tabula_muris/transformer_protonet_FCNet/20231207_164803/best_model.tar ",
+        "train_acc": 96.11,
+        "val_acc": 93.91,
+        "test_acc": 94.59
+    },
+    "transformer_encoder_c40_l1_h2_ffw256_p0.1_mFalse_dswissprot_k5": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 5shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw256_p0.1_mFalse_dswissprot_k5/swissprot/transformer_protonet_FCNet/20231207_165639/best_model.tar ",
+        "train_acc": 74.84,
+        "val_acc": 72.88,
+        "test_acc": 65.41
+    },
+    "transformer_encoder_c40_l1_h2_ffw256_p0.1_mFalse_dswissprot_k1": {
+        "setting": "swissprot-train-FCNet-transformer_protonet 1shot 5way",
+        "model": "checkpoints/transformer_encoder_c40_l1_h2_ffw256_p0.1_mFalse_dswissprot_k1/swissprot/transformer_protonet_FCNet/20231207_165655/best_model.tar ",
+        "train_acc": 53.04,
+        "val_acc": 55.45,
+        "test_acc": 52.82
+    }
+}
