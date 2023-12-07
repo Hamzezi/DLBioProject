@@ -56,8 +56,8 @@ class TransformerNet(nn.Module, ConceptNetMixin):
         super(TransformerNet, self).__init__()
         ConceptNetMixin.__init__(self, x_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs) # more patches => fewer parameters
 
-        self.encoder = TransformerEncoderNet(x_dim, ffw_dim, nhead, num_layers, go_mask, dropout, mask_method, num_GOs)
-        self.decoder = TransformerDecoderNet(x_dim, n_decoder_concepts, ffw_dim, nhead, num_layers, go_mask, dropout, mask_method, num_GOs)
+        self.encoder = TransformerEncoderNet(x_dim, layer_dim, ffw_dim, nhead, num_layers, go_mask, dropout, mask_method, num_GOs)
+        self.decoder = TransformerDecoderNet(x_dim, layer_dim, n_decoder_concepts, ffw_dim, nhead, num_layers, go_mask, dropout, mask_method, num_GOs)
         
         self.final_feat_dim = self.input_dim
 
