@@ -26,6 +26,21 @@ def build_command(*, transformer_type, num_GOs, num_layers, nhead, ffw_dim, drop
     )
     return cmd
 
+def build_command_mp(*, transformer_type, num_GOs, num_layers, nhead, ffw_dim, dropout, given_mask, dataset, n_shot, stop_epoch=20):
+    exp_name = f"{transformer_type}_c{num_GOs}_l{num_layers}_h{nhead}_ffw{ffw_dim}_p{dropout}_m{given_mask}_d{dataset}_k{n_shot}"
+    # make sure to leave a space at the end of each line for the next line
+    cmd = (
+        f"python model_params.py exp.name={exp_name} method=transformer "
+        f"dataset={dataset} n_shot={n_shot} "
+        f"method.{transformer_type}_args.given_masks={given_mask} "
+        f"method.{transformer_type}_args.num_GOs={num_GOs} "
+        f"method.{transformer_type}_args.num_layers={num_layers} "
+        f"method.{transformer_type}_args.ffw_dim={ffw_dim} "
+        f"method.{transformer_type}_args.nhead={nhead} method.transformer_type={transformer_type} method.{transformer_type}_args.dropout={dropout} "
+        f"method.stop_epoch={stop_epoch}"
+    )
+    return cmd
+
 
 def main(multiprocessing_enabled, num_processes):
 
