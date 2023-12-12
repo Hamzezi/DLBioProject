@@ -31,7 +31,7 @@ class Baseline(MetaTemplate):
 
         if torch.cuda.is_available():
             self.device = torch.device("cuda")
-        if torch.backends.mps.is_available():
+        elif torch.backends.mps.is_available():
             self.device = torch.device("cpu")
         else:
             self.device = torch.device("cpu")
