@@ -32,7 +32,7 @@ def build_command_comet(*, num_GOs, dataset, n_shot, stop_epoch=20):
     cmd = (
         f"python run.py exp.name={exp_name} method=protonet "
         f"backbone._target_=backbones.fcnet.EnFCNet dataset={dataset} n_shot={n_shot} "
-        f"backbone.num_GOs={num_GOs} "
+        f"+backbone.num_GOs={num_GOs} "
         f"method.stop_epoch={stop_epoch}"
     )
     return cmd
