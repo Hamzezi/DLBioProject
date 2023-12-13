@@ -57,7 +57,7 @@ python grid_search.py
 
 #### Multiprocessing
 
-In order to run the grid search in a parallel manner, you can add the `--multiprocessing` flag to the command, like so:
+In order to run the grid search in a parallel manner, you can add the `--multiprocess` flag to the command, like so:
 
 ```bash
 python grid_search.py --multiprocess
