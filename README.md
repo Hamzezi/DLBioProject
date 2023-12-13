@@ -89,7 +89,7 @@ conda env create -f environment.yml
 Before each run, activate the environment with:
 
 ```bash
-conda activate few-shot-benchmark 
+conda activate fewshotbench
 ```
 
 ### Pip
