@@ -30,7 +30,48 @@ We implement `COMET` by swapping the ProtoNet's `FCNet` backbone with (1) `backb
 
 ## Instructions to run
 
-BLABLABLA
+- To run COMET with `num_GOs=100`:
+
+```bash
+python run.py exp.name={exp_name} method=comet method.comet_args.num_GOs=1 dataset=swissprot
+```
+
+- To run COMET with a transformer backbone (our method):
+
+```bash
+python run.py exp.name={exp_name} method=transformer dataset={dataset}
+```
+
+You can opt use part of the transformer by accessing the field `method.transformer_type`, which can either be set to the encoder (`transformer_encoder`), the decoder (`transformer_decoder`), or the entire transformer (`transformer`) which is the default setting. Additionally, you can further tweak the hyperparameters by accessing the following fields: `method.{transformer_type}_args.{arg}`. For example, in order to run ProtoNet, with a decoder backbone, which has 2 heads (instead of the default of 1), the following command achieves that goal:
+
+```bash
+python run.py exp.name={exp_name} method=transformer method.transformer_type=transformer_decoder method.transformer_decoder_args.nhead=2 dataset={dataset}
+```
+### Grid Search
+
+The grid search is defined in `grid_search.py` in order to tune the hyperparameters of the transformer. The file contains some pre-defined hyperparameter space to search in, but it is up to the user to define their own if required. To run the grid search, it suffices to execute:
+
+```bash
+python grid_search.py
+```
+
+#### Multiprocessing
+
+In order to run the grid search in a parallel manner, you can add the `--multiprocessing` flag to the command, like so:
+
+```bash
+python grid_search.py --multiprocess
+```
+
+> Note: This will by default set the number of cores to `multiprocessing.cpu_count()-1`. In order to change this, please refer to the [number of cores](#number-of-cores) section below.
+
+#### Number of cores
+
+To set the number of cores to be used, you can use the follwing flag `--num_processes`, note that the `--multiprocess` flag needs to be specified too. Below, you will find and example of usage where we set the `number of cores to 2`.
+
+```bash
+python grid_search.py --multiprocess --num_processes 2 
+```
 
 
 ## Installation
@@ -72,52 +113,8 @@ Please note that `wandb` defaults are set in `conf/main.yaml` (by default, wandb
 python run.py exp.name={exp_name} method=protonet dataset=swissprot
 ```
 
-- To run COMET:
-
-```bash
-python run.py exp.name={exp_name} method=protonet backbone._target_=backbones.fcnet.EnFCNet dataset=swissprot
-```
-
 By default, method is set to MAML, and dataset is set to Tabula Muris.
 The experiment name must always be specified.
-
-
-- To run ProtoNet with a transformer backbone:
-
-```bash
-python run.py exp.name={exp_name} method=transformer dataset={dataset}
-```
-
-You can opt use part of the transformer by accessing the field `method.transformer_type`, which can either be set to the encoder (`transformer_encoder`), the decoder (`transformer_decoder`), or the entire transformer (`transformer`) which is the default setting. Additionally, you can further tweak the hyperparametters by accessing the following fields: `method.{transformer_type}_args.{arg}`. For example, in order to run ProtoNet, with a decoder backbone, which has 2 heads (instead of the default of 1), the following command achieves that goal:
-
-```bash
-python run.py exp.name={exp_name} method=transformer method.transformer_type=transformer_decoder method.transformer_decoder_args.nhead=2 dataset={dataset}
-```
-### Grid Search
-
-The grid search is defined in `grid_search.py` in order to tune the hyperparameters of the transformer. The file contains some pre-defined hyperparameter space to search in, but it is up to the user to define their own if required. To run the grid search, it suffices to execute:
-
-```bash
-python grid_search.py
-```
-
-#### multiprocessing
-
-In order to run the grid search in a parallel manner, you can add the `--multiprocessing` flag to the command, like so:
-
-```bash
-python grid_search.py --multiprocess
-```
-
-> Note: This will by default set the number of cores to `multiprocessing.cpu_count()-1`. In order to change this, please refer to the [number of cores](#number-of-cores) section below.
-
-##### Number of cores
-
-To set the number of cores to be used, you can use the follwing flag `--num_processes`, note that the `--multiprocess` flag needs to be specified too. Below, you will find and example of usage where we set the `number of cores to 2`.
-
-```bash
-python grid_search.py --multiprocess --num_processes 2 
-```
 
 ### Testing
 
