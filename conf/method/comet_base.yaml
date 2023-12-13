@@ -1,0 +1,5 @@
+comet_args:
+  backbone_cls: 'backbones.fcnet.EnFCNet'
+  mask_method: 'multiply' # don't change this for comet
+  given_masks: True
+  num_GOs: 20

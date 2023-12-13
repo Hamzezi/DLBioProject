@@ -1,27 +1,30 @@
 transformer_encoder_args:
+  backbone_cls: 'backbones.transformer.TransformerEncoderNet'
   num_layers: 1
   nhead: 2
-  dropout: 0
+  dropout: 0.1
   ffw_dim: 64
   mask_method: 'index'
   given_masks: False
   num_GOs: 20
 
 transformer_decoder_args:
+  backbone_cls: 'backbones.transformer.TransformerDecoderNet'
   n_decoder_concepts: 10
   num_layers: 1
   nhead: 2
-  dropout: 0
+  dropout: 0.1
   ffw_dim: 64
   mask_method: 'index'
   given_masks: False
   num_GOs: 20
 
 transformer_args:
+  backbone_cls: 'backbones.transformer.TransformerNet'
   n_decoder_concepts: 10
   num_layers: 1
   nhead: 2
-  dropout: 0
+  dropout: 0.1
   ffw_dim: 64
   mask_method: 'index'
   given_masks: False

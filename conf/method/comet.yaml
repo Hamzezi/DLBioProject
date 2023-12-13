@@ -1,10 +1,8 @@
 defaults:
   - meta_base
+  - comet_base
 
 cls:
   _target_: methods.protonet.ProtoNet
-
-backbone:
-  _target_: backbones.fcnet.EnFCNet
 
 name: comet

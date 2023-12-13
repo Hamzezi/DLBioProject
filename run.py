@@ -32,37 +32,10 @@ def initialize_dataset_model(cfg):
     # For MAML (and other optimization-based methods), need to instantiate backbone layers with fast weight
     if cfg.method.fast_weight:
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, fast_weight=True)
-    elif hasattr(train_dataset, "go_mask") and \
-            cfg.method.name == "protonet" and \
-            ("EnFCNet" in cfg.backbone._target_):
-        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=train_dataset.go_mask) # COMET needs go_mask
+    elif cfg.method.name == "comet":
+        backbone = instantiate_comet_mlp(cfg, train_dataset)
     elif cfg.method.name == "transformer_protonet":
-        transformer_type = cfg.method.transformer_type
-        if transformer_type not in ["transformer", "transformer_encoder", "transformer_decoder"]:
-            raise ValueError(f"Unknown transformer name: {transformer_type}")
-        
-        if transformer_type == "transformer":
-            kwargs = cfg.method.transformer_args
-            backbone_name = "backbones.transformer.TransformerNet"
-        elif transformer_type == "transformer_encoder":
-            kwargs = cfg.method.transformer_encoder_args
-            backbone_name = "backbones.transformer.TransformerEncoderNet"
-        elif transformer_type == "transformer_decoder":
-            kwargs = cfg.method.transformer_decoder_args
-            backbone_name = "backbones.transformer.TransformerDecoderNet"
-        
-        # set _target_ to backbone_name
-        cfg.backbone._target_ = backbone_name
-
-        with open_dict(kwargs):
-            given_masks = kwargs.pop("given_masks", False)
-
-        if given_masks and hasattr(train_dataset, "go_mask"):
-            go_mask = train_dataset.go_mask
-        else:
-            go_mask = None
-
-        backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=go_mask, **kwargs)
+        backbone = instantiate_comet_transformer(cfg, train_dataset)
     else:
         backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim)
 
@@ -74,15 +47,62 @@ def initialize_dataset_model(cfg):
 
     # Print model architecture
     # print("Model Architecture:")
-    # print(model)
+    print(model)
 
     print_num_params(model)
+
+    raise ValueError("Stop here")
 
 
     if cfg.method.name == 'maml':
         cfg.method.stop_epoch *= model.n_task  # maml use multiple tasks in one update
 
     return train_loader, val_loader, model
+
+
+def instantiate_comet_mlp(cfg, train_dataset):
+    kwargs = cfg.method.comet_args
+    with open_dict(kwargs):
+        # set _target_ to backbone_name
+        cfg.backbone._target_ = kwargs.pop("backbone_cls", "backbones.fcnet.EnFCNet")
+    go_mask = maybe_return_go_mask(kwargs, train_dataset)
+    backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=go_mask, **kwargs)
+    return backbone
+
+
+def instantiate_comet_transformer(cfg, train_dataset):
+    transformer_type = cfg.method.transformer_type
+    if transformer_type not in ["transformer", "transformer_encoder", "transformer_decoder"]:
+        raise ValueError(f"Unknown transformer name: {transformer_type}")
+    
+    if transformer_type == "transformer":
+        kwargs = cfg.method.transformer_args
+    elif transformer_type == "transformer_encoder":
+        kwargs = cfg.method.transformer_encoder_args
+    elif transformer_type == "transformer_decoder":
+        kwargs = cfg.method.transformer_decoder_args
+
+    with open_dict(kwargs):
+        # set _target_ to backbone_name
+        cfg.backbone._target_ = kwargs.pop("backbone_cls", "backbones.transformer.TransformerEncoderNet")
+
+    go_mask = maybe_return_go_mask(kwargs, train_dataset)
+
+    backbone = instantiate(cfg.backbone, x_dim=train_dataset.dim, go_mask=go_mask, **kwargs)
+
+    return backbone
+
+
+def maybe_return_go_mask(kwargs, train_dataset):
+    with open_dict(kwargs):
+        given_masks = kwargs.pop("given_masks", False)
+
+    if given_masks and hasattr(train_dataset, "go_mask"):
+        go_mask = train_dataset.go_mask
+    else:
+        go_mask = None
+
+    return go_mask
 
 
 @hydra.main(version_base=None, config_path='conf', config_name='main')
