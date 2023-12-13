@@ -25,7 +25,7 @@ run.py
 ```
 
 ### Results and plots
-The `results/` folder contains files which aim to extract the results from our expreiments and place them in a `json` file placed back in `results/res_data/`. This file was later used to create our plots within the `extract_results.ipynb` notebooke. The `model_params.py` was a python script mainly used in the aforementioned notebook to extract each model's `number of trainable parameters`,  which was used to ensure that models were comparable in terms of size.
+The `results/` folder contains files which aim to extract the results from our expreiments and place them in a `json` file placed back in `results/res_data/`. This file was later used to create our plots within the `extract_results.ipynb` notebook. The `model_params.py` was a python script mainly used in the aforementioned notebook to extract each model's `number of trainable parameters`,  which was used to ensure that models were comparable in terms of size.
 
 ### Classes
 
