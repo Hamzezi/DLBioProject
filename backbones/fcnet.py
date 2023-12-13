@@ -42,11 +42,14 @@ def generate_simple_go_mask(x_dim, num_GOs=20):
 class ConceptNetMixin:
     # implements the input_dim and masking logic for EnFCNet and TransformerNet
     # this class is not meant to be used directly
+    # https://github.com/snap-stanford/comet
 
-    def __init__(self, x_dim, go_mask=None, mask_method="multiply", num_GOs=20):
+    def __init__(self, x_dim, go_mask=None, mask_method="multiply", num_GOs=None):
+        assert not (go_mask is None and num_GOs is None), "Must provide either go_mask or num_GOs"
         if go_mask is None:
             self.go_mask = generate_simple_go_mask(x_dim=x_dim, num_GOs=num_GOs) # patches of genes
-        else:
+        else: # ignores num_GOs if go_mask is provided
+            print("Warning: using GO mask from dataset, num_GOs will be ignored")
             self.go_mask = go_mask
 
         self.num_GOs = len(self.go_mask)
@@ -63,12 +66,13 @@ class ConceptNetMixin:
 
     def compute_input_dim(self, x_dim):
         if self.n_concepts == self.num_GOs + 1:
-            return x_dim # the final concept is the original input
-        num_genes_per_go = max([len(genes) for genes in self.go_mask]) # all GOs have different number of genes
+            return x_dim # the final concept is the original input (from COMET codebase)
+        num_genes_per_go = max([len(genes) for genes in self.go_mask]) # GOs might have different number of genes
         num_genes_per_go = int(math.ceil(num_genes_per_go / 8) * 8) # make it divisible by 8
-        return num_genes_per_go
+        return num_genes_per_go # x shape: (batch, num_GOs, num_genes_per_go)
 
     def generate_masks(self, x):
+        # copied from COMET codebase
         batch, num_genes = x.shape
         self.masks = torch.zeros(self.n_concepts, batch, num_genes, device=x.device)
         for i, genes in enumerate(self.go_mask):
@@ -100,10 +104,10 @@ class ConceptNetMixin:
 
 class EnFCNet(nn.Module, ConceptNetMixin):
 
-    def __init__(self, x_dim, layer_dim=[64, 64], go_mask=None, mask_method="multiply", dropout=0.2, num_GOs=20):
+    def __init__(self, x_dim, layer_dim=[64, 64], go_mask=None, mask_method="multiply", dropout=0.2, num_GOs=None):
         # initialize ConceptNetMixin with provided args
         super(EnFCNet, self).__init__()
-        ConceptNetMixin.__init__(self, x_dim, go_mask, mask_method, num_GOs=num_GOs)
+        ConceptNetMixin.__init__(self, x_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs)
 
         self.final_feat_dim = layer_dim[-1] # used in other places
 

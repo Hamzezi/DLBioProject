@@ -1,11 +1,9 @@
 import torch
 from torch import nn as nn
-import math
 from backbones.fcnet import ConceptNetMixin
 
 
 class TransformerEncoderNet(nn.Module, ConceptNetMixin):
-    #TODO: this seems to work FAR better than TransformerDecoderNet
     def __init__(self, x_dim, layer_dim, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
         super(TransformerEncoderNet, self).__init__()
         ConceptNetMixin.__init__(self, x_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs) # more patches => fewer parameters
@@ -25,14 +23,15 @@ class TransformerEncoderNet(nn.Module, ConceptNetMixin):
 
 
 class TransformerDecoderNet(nn.Module, ConceptNetMixin):
-    #TODO: this has subpar performance compared to EnFCNet
+    # idea based on object queries from DETR https://arxiv.org/abs/2005.12872
     def __init__(self, x_dim, layer_dim, n_decoder_concepts=10, ffw_dim=64, nhead=1, num_layers=1, go_mask=None, dropout=0.2, mask_method="index", num_GOs=20):
         super(TransformerDecoderNet, self).__init__()
         ConceptNetMixin.__init__(self, x_dim, go_mask=go_mask, mask_method=mask_method, num_GOs=num_GOs) # more patches => fewer parameters
 
+        # these are the "object queries"
         self.n_decoder_concepts = n_decoder_concepts
         self.concept_embeds = nn.Embedding(self.n_decoder_concepts, self.input_dim)
-        
+    
         decoder_layer = nn.TransformerDecoderLayer(
             d_model=self.input_dim, nhead=nhead, dim_feedforward=ffw_dim,
             dropout=dropout, batch_first=True, norm_first=False
@@ -46,6 +45,7 @@ class TransformerDecoderNet(nn.Module, ConceptNetMixin):
             x = self.get_masked_inputs(x) # (batch, n_concepts, numGenes)
         concept_indices = torch.arange(self.n_decoder_concepts, device=x.device)
         concepts = self.concept_embeds(concept_indices).unsqueeze(0).repeat(x.shape[0], 1, 1)
+        # self-attn on `concepts`, cross-attn on `concepts` and `x`
         concepts = self.decoder(concepts, x)
         return concepts
 
