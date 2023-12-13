@@ -100,10 +100,10 @@ class ConceptNetMixin:
 
 class EnFCNet(nn.Module, ConceptNetMixin):
 
-    def __init__(self, x_dim, layer_dim=[64, 64], go_mask=None, mask_method="multiply", dropout=0.2):
+    def __init__(self, x_dim, layer_dim=[64, 64], go_mask=None, mask_method="multiply", dropout=0.2, num_GOs=20):
         # initialize ConceptNetMixin with provided args
         super(EnFCNet, self).__init__()
-        ConceptNetMixin.__init__(self, x_dim, go_mask, mask_method)
+        ConceptNetMixin.__init__(self, x_dim, go_mask, mask_method, num_GOs=num_GOs)
 
         self.final_feat_dim = layer_dim[-1] # used in other places
 
