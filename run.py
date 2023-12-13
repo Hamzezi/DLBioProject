@@ -45,14 +45,7 @@ def initialize_dataset_model(cfg):
     model = instantiate(cfg.method.cls, backbone=backbone)
     model = model.to(device)
 
-    # Print model architecture
-    # print("Model Architecture:")
-    print(model)
-
     print_num_params(model)
-
-    raise ValueError("Stop here")
-
 
     if cfg.method.name == 'maml':
         cfg.method.stop_epoch *= model.n_task  # maml use multiple tasks in one update
