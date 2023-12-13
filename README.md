@@ -1,4 +1,36 @@
-# Few Shot Benchmark for Biomedical Datasets
+# CS-502 Project Option 2, Group 16
+
+In this project we modify COMET by [Cao et al.](https://arxiv.org/abs/2007.07375).
+
+## Code structure
+
+### Files
+
+From the given codebase, we modify or add the following files for our implementation:
+
+```bash
+backbones/fcnet.py
+backbones/transfomer.py
+
+conf/method/comet.yaml
+conf/method/comet_base.yaml
+conf/method/transformer.yaml
+conf/method/transformer_base.yaml
+
+results/
+extract_results.ipynb
+grid_search.py
+model_params.py
+run.py
+```
+
+### Classes
+
+We implement `COMET` by swapping the ProtoNet's `FCNet` backbone with (1) `backbones.fcnet.EnFCNet` (COMET's backbone) and (2) `backbones.transformer.Transformer****` (our transformer backbones). In addition, we also add the `backbones.fcnet.ConceptNetMixin` class to control the extraction of the concepts from the input vector $x$.
+
+## Instructions to run
+
+BLABLABLA
 
 
 ## Installation
